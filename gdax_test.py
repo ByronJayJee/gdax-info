@@ -4,10 +4,10 @@ import gdax_global_data as ggd
 import pprint
 import json
 
-class myWebsocketClient(gdax.WebsocketClient):
+class myWebsocketClient(gdax.WebsocketClient,object):
     def on_open(self):
         self.url = "wss://ws-feed.gdax.com/"
-        self.products = ["LTC-USD"]
+        #self.products = ["LTC-USD"]
         self.message_count = 0
         print("Lets count the messages!")
     def on_message(self, msg):
@@ -21,12 +21,14 @@ class myWebsocketClient(gdax.WebsocketClient):
 #product_list = public_client.get_products()
 #pprint.pprint(product_list)
 
-print(json.dumps(ggd.product_list, sort_keys=True, indent=4))
+#print(json.dumps(ggd.product_list, sort_keys=True, indent=4))
 
-wsClient = myWebsocketClient()
+myProd = ["LTC-USD"]
+
+wsClient = myWebsocketClient(products=myProd)
 wsClient.start()
 print(wsClient.url, wsClient.products)
-while (wsClient.message_count < 5):
+while (wsClient.message_count < 50):
     print ("\nmessage_count =", "{} \n".format(wsClient.message_count))
     time.sleep(1)
 wsClient.close()
